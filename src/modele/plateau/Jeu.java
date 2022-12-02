@@ -65,17 +65,17 @@ public class Jeu {
         ordonnanceur.add(Controle4Directions.getInstance());
 
         colonne = new Colonne(this);
-        addEntite(colonne, 3, 5);
+        addEntite(colonne, 14, 6);
         ColonneDeplacement.getInstance().addEntiteDynamique(colonne);
         ordonnanceur.add(ColonneDeplacement.getInstance());
 
         colonne = new Colonne(this);
-        addEntite(colonne, 3, 4);
+        addEntite(colonne, 14, 5);
         ColonneDeplacement.getInstance().addEntiteDynamique(colonne);
         ordonnanceur.add(ColonneDeplacement.getInstance());
 
         colonne = new Colonne(this);
-        addEntite(colonne, 3, 3);
+        addEntite(colonne, 14, 4);
         ColonneDeplacement.getInstance().addEntiteDynamique(colonne);
         ordonnanceur.add(ColonneDeplacement.getInstance());
 
