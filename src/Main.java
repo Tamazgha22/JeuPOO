@@ -8,7 +8,7 @@ import modele.plateau.Jeu;
  * and open the template in the editor.
  */
 
-
+//JEUPOO
 public class Main {
     public static void main(String[] args) {
         Jeu jeu = new Jeu();
