@@ -28,6 +28,7 @@ public class Jeu {
 
     private Heros hector;
     private Colonne colonne;
+    private  Bot smick;
 
     private HashMap<Entite, Point> map = new  HashMap<Entite, Point>(); // permet de récupérer la position d'une entité à partir de sa référence
     private Entite[][] grilleEntites = new Entite[SIZE_X][SIZE_Y]; // permet de récupérer une entité à partir de ses coordonnées
@@ -54,6 +55,12 @@ public class Jeu {
     public Heros getHector() {
         return hector;
     }
+    public Bot getSmick() {
+        return smick;
+    }
+    public Colonne getColonne() {
+        return colonne;
+    }
     
     private void initialisationDesEntites() {
         hector = new Heros(this);
@@ -63,6 +70,15 @@ public class Jeu {
         ordonnanceur.add(g);
         Controle4Directions.getInstance().addEntiteDynamique(hector);
         ordonnanceur.add(Controle4Directions.getInstance());
+
+        //Ennemi
+        smick = new Bot(this);
+        addEntite(smick, 1, 8);
+        Gravite g1 = new Gravite();
+        g1.addEntiteDynamique(smick);
+        ordonnanceur.add(g1);
+//        Controle4Directions.getInstance().addEntiteDynamique(hector);
+//        ordonnanceur.add(Controle4Directions.getInstance());
 
         colonne = new Colonne(this);
         addEntite(colonne, 14, 6);
@@ -128,9 +144,9 @@ public class Jeu {
         addEntite(new Corde(this), 9, 7);
         addEntite(new Corde(this), 9, 8);
 
-        addEntite(new Bot(this), 1, 8);
-        addEntite(new Bot(this), 11, 3);
-        addEntite(new Bot(this), 18, 6);
+//        addEntite(new Bot(this), 1, 8);
+//        addEntite(new Bot(this), 11, 3);
+//        addEntite(new Bot(this), 18, 6);
 
         //addEntite(new Bot(this), 4, 5);
 
