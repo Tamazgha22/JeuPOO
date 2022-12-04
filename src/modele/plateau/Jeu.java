@@ -5,11 +5,7 @@
  */
 package modele.plateau;
 
-import modele.deplacements.Controle4Directions;
-import modele.deplacements.ColonneDeplacement;
-import modele.deplacements.Direction;
-import modele.deplacements.Gravite;
-import modele.deplacements.Ordonnanceur;
+import modele.deplacements.*;
 
 import java.awt.Point;
 import java.util.HashMap;
@@ -73,12 +69,12 @@ public class Jeu {
 
         //Ennemi
         smick = new Bot(this);
-        addEntite(smick, 1, 8);
+        addEntite(smick, 2, 8);
         Gravite g1 = new Gravite();
         g1.addEntiteDynamique(smick);
         ordonnanceur.add(g1);
-//        Controle4Directions.getInstance().addEntiteDynamique(hector);
-//        ordonnanceur.add(Controle4Directions.getInstance());
+        IA.getInstance().addEntiteDynamique(smick);
+        ordonnanceur.add(IA.getInstance());
 
         colonne = new Colonne(this);
         addEntite(colonne, 14, 6);
