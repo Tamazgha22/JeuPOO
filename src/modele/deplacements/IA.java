@@ -36,8 +36,12 @@ public class IA extends RealisateurDeDeplacement {
             if (!enemieEstMort){
                 setDirectionCouranteDroite();
                 ret = true;
+
+                System.out.println(e.regarderDansLaDirection(Direction.droite));
+                System.out.println(e.regarderDansLaDirection(Direction.gauche));
+
                 setDirectionCouranteGauche();
-//                ret = true;
+                //ret = true;
             }
         }
         return ret;
