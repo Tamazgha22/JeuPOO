@@ -250,8 +250,21 @@ public class Jeu {
         return retour;
     }
 
-    
-    
+    public boolean interactionEntite(Entite e, Interaction i, Direction d){
+        boolean retour = false;
+        Point pCourant = map.get(e);
+        if(contenuDansGrille(pCourant) && i == Interaction.Entree || i == Interaction.e){
+            int x = (int) pCourant.getX();
+            int y = (int) pCourant.getY();
+            if(d == Direction.droite) x += 1;
+            if(d == Direction.gauche) x -= 1;
+            Entite entite = objetALaPosition(new Point(x,y));
+        }
+
+        return retour;
+    }
+
+
     private Point calculerPointCible(Point pCourant, Direction d) {
         Point pCible = null;
         
