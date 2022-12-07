@@ -68,13 +68,29 @@ public class Jeu {
         ordonnanceur.add(Controle4Directions.getInstance());
 
         //Ennemi
-        smick = new Bot(this);
-        addEntite(smick, 2, 8);
-        Gravite g1 = new Gravite();
-        g1.addEntiteDynamique(smick);
-        ordonnanceur.add(g1);
-        IA.getInstance().addEntiteDynamique(smick);
-        ordonnanceur.add(IA.getInstance());
+//        smick = new Bot(this);
+//        addEntite(smick, 2, 8);
+//        Gravite g1 = new Gravite();
+//        g1.addEntiteDynamique(smick);
+//        ordonnanceur.add(g1);
+//        IA.getInstance().addEntiteDynamique(smick);
+//        ordonnanceur.add(IA.getInstance());
+        Bot smick = new Bot(this);
+        addEntite(smick, 1, 8);
+        ordonnanceur.add(smick.getIA());
+        ordonnanceur.add(smick.getGravite());
+
+        Bot smick2 = new Bot(this);
+        addEntite(smick2, 15, 8);
+        ordonnanceur.add(smick2.getIA());
+        ordonnanceur.add(smick2.getGravite());
+
+        Bot smick3 = new Bot(this);
+        addEntite(smick3, 8, 2);
+        ordonnanceur.add(smick3.getIA());
+        ordonnanceur.add(smick3.getGravite());
+
+
 
         colonne = new Colonne(this);
         addEntite(colonne, 14, 6);
@@ -200,6 +216,7 @@ public class Jeu {
 
         return retour;
     }
+
     
     
     private Point calculerPointCible(Point pCourant, Direction d) {

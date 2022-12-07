@@ -1,48 +1,39 @@
 package modele.deplacements;
 
-import modele.plateau.Entite;
 import modele.plateau.EntiteDynamique;
-import modele.plateau.Jeu;
+
+import java.util.Random;
 
 public class IA extends RealisateurDeDeplacement {
-    private boolean enemieEstMort = false;
-    // Design pattern singleton
-    private static IA c3d;
+    private Direction directionCourante;
 
-    public static IA getInstance() {
-        if (c3d == null) {
-            c3d = new IA();
-        }
-        return c3d;
+    public void setDirectionCourante(Direction _directionCourante) {
+        directionCourante = _directionCourante;
     }
 
-    public void setDirectionCouranteDroite() {
-        for (EntiteDynamique e : lstEntitesDynamiques) {
-            Direction directionCouranteDroite = Direction.droite;
-            e.avancerDirectionChoisie(directionCouranteDroite);
-        }
+    public static Direction randomDirection(){
+        Random r = new Random();
+        if(r.nextInt(2) == 1) return Direction.droite;
+        return Direction.gauche;
     }
 
-    public void setDirectionCouranteGauche() {
-        for (EntiteDynamique e : lstEntitesDynamiques) {
-            Direction directionCouranteGauche = Direction.gauche;
-            e.avancerDirectionChoisie(directionCouranteGauche);
-        }
-    }
-
-    protected boolean realiserDeplacement() {
+    public boolean realiserDeplacement() {
         boolean ret = false;
         for (EntiteDynamique e : lstEntitesDynamiques) {
-            if (!enemieEstMort){
-                setDirectionCouranteDroite();
-                ret = true;
-
-                System.out.println(e.regarderDansLaDirection(Direction.droite));
-                System.out.println(e.regarderDansLaDirection(Direction.gauche));
-
-                setDirectionCouranteGauche();
-                //ret = true;
-            }
+            if (directionCourante != null)
+                switch (directionCourante) {
+                    case droite :
+                        if (e.avancerDirectionChoisie(directionCourante))
+                            ret = true;
+                        else setDirectionCourante(Direction.gauche);
+                        break;
+                    case gauche :
+                        if (e.avancerDirectionChoisie(directionCourante))
+                            ret = true;
+                        else setDirectionCourante(Direction.droite);
+                        break;
+                }
+            else randomDirection();
         }
         return ret;
     }
