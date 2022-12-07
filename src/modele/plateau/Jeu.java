@@ -60,7 +60,7 @@ public class Jeu {
     
     private void initialisationDesEntites() {
         hector = new Heros(this);
-        addEntite(hector, 2, 1);
+        addEntite(hector, 15, 6);
         Gravite g = new Gravite();
         g.addEntiteDynamique(hector);
         ordonnanceur.add(g);
@@ -78,10 +78,10 @@ public class Jeu {
         ordonnanceur.add(smick2.getIA());
         ordonnanceur.add(smick2.getGravite());
 
-       /* Bot smick3 = new Bot(this);
-        addEntite(smick3, 8, 2);
+        Bot smick3 = new Bot(this);
+        addEntite(smick3, 2, 1);
         ordonnanceur.add(smick3.getIA());
-        ordonnanceur.add(smick3.getGravite());*/
+        ordonnanceur.add(smick3.getGravite());
 
 
 
@@ -102,7 +102,6 @@ public class Jeu {
 
 
         Bombe bombe = new Bombe(this);
-        addEntite(bombe,3,5);
         addEntite(bombe,5,5);
         addEntite(bombe,12,6);
 
@@ -188,6 +187,7 @@ public class Jeu {
 
         boolean deplacement = false;
         boolean bombe = false;
+        boolean Corde = false;
 
         if (contenuDansGrille(pCible)){ // a adapter (collisions murs, etc.)
             // compter le déplacement : 1 deplacement horizontal et vertical max par pas de temps par entité
@@ -202,21 +202,22 @@ public class Jeu {
                         bombe = true;
                     }
                 }
-                if(objetALaPosition(pCible) instanceof Corde){
-                    Entite entiteCorde = objetALaPosition(pCible);
+                if(objetALaPosition(pCible) instanceof Corde && e instanceof Heros){
+                    Corde cible = (Corde) objetALaPosition(pCible);
                     deplacement = true;
-                    addEntite(entiteCorde, (int) pCible.getX(), (int) pCible.getY());
-
+                    addEntite(cible, (int) pCible.getX(), (int) pCible.getY());
                 }
                 if(objetALaPosition(pCible) instanceof Heros && e instanceof Colonne){
                     deplacerEntite(objetALaPosition(pCible), Direction.gauche);
                     deplacement = true;
                 }
                 if(objetALaPosition(pCible) instanceof Heros && e instanceof Bot){
+                    Heros cible = (Heros) objetALaPosition(pCible);
+                    supprimerEntite(cible, (int) pCible.getX(), (int) pCible.getY());
                     deplacement = false;
+                    System.out.println("Héro mort !");
                 }
-
-                if(objetALaPosition(pCible) instanceof Bot && (e instanceof Colonne || e instanceof Heros)) {
+                if(objetALaPosition(pCible) instanceof Bot && e instanceof Colonne) {
                     Bot cible = (Bot) objetALaPosition(pCible);
                     supprimerEntite(cible, (int) pCible.getX(), (int) pCible.getY());
                     ordonnanceur.remove(cible.getIA());
@@ -245,20 +246,6 @@ public class Jeu {
 
         if (retour) {
             deplacerEntite(pCourant, pCible, e);
-        }
-
-        return retour;
-    }
-
-    public boolean interactionEntite(Entite e, Interaction i, Direction d){
-        boolean retour = false;
-        Point pCourant = map.get(e);
-        if(contenuDansGrille(pCourant) && i == Interaction.Entree || i == Interaction.e){
-            int x = (int) pCourant.getX();
-            int y = (int) pCourant.getY();
-            if(d == Direction.droite) x += 1;
-            if(d == Direction.gauche) x -= 1;
-            Entite entite = objetALaPosition(new Point(x,y));
         }
 
         return retour;

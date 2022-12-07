@@ -5,6 +5,9 @@
  */
 package modele.plateau;
 
+import modele.deplacements.Gravite;
+import modele.deplacements.IA;
+
 /**
  * Héros du jeu
  */
