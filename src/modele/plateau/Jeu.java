@@ -67,14 +67,7 @@ public class Jeu {
         Controle4Directions.getInstance().addEntiteDynamique(hector);
         ordonnanceur.add(Controle4Directions.getInstance());
 
-        //Ennemi
-//        smick = new Bot(this);
-//        addEntite(smick, 2, 8);
-//        Gravite g1 = new Gravite();
-//        g1.addEntiteDynamique(smick);
-//        ordonnanceur.add(g1);
-//        IA.getInstance().addEntiteDynamique(smick);
-//        ordonnanceur.add(IA.getInstance());
+
         Bot smick = new Bot(this);
         addEntite(smick, 1, 8);
         ordonnanceur.add(smick.getIA());
@@ -85,10 +78,10 @@ public class Jeu {
         ordonnanceur.add(smick2.getIA());
         ordonnanceur.add(smick2.getGravite());
 
-        Bot smick3 = new Bot(this);
+       /* Bot smick3 = new Bot(this);
         addEntite(smick3, 8, 2);
         ordonnanceur.add(smick3.getIA());
-        ordonnanceur.add(smick3.getGravite());
+        ordonnanceur.add(smick3.getGravite());*/
 
 
 
@@ -106,6 +99,13 @@ public class Jeu {
         addEntite(colonne, 14, 4);
         ColonneDeplacement.getInstance().addEntiteDynamique(colonne);
         ordonnanceur.add(ColonneDeplacement.getInstance());
+
+
+        Bombe bombe = new Bombe(this);
+        addEntite(bombe,3,5);
+        addEntite(bombe,5,5);
+        addEntite(bombe,12,6);
+
 
         // murs extérieurs horizontaux
         for (int x = 0; x < 20; x++) {
@@ -156,18 +156,16 @@ public class Jeu {
         addEntite(new Corde(this), 9, 7);
         addEntite(new Corde(this), 9, 8);
 
-//        addEntite(new Bot(this), 1, 8);
-//        addEntite(new Bot(this), 11, 3);
-//        addEntite(new Bot(this), 18, 6);
-
-        //addEntite(new Bot(this), 4, 5);
-
-
     }
 
     private void addEntite(Entite e, int x, int y) {
         grilleEntites[x][y] = e;
         map.put(e, new Point(x, y));
+    }
+
+    private void supprimerEntite(Entite e, int x, int y){
+        grilleEntites[x][y] = null;
+        map.remove(e);
     }
     
     /** Permet par exemple a une entité  de percevoir sont environnement proche et de définir sa stratégie de déplacement
@@ -183,31 +181,66 @@ public class Jeu {
      */
     public boolean deplacerEntite(Entite e, Direction d) {
         boolean retour = false;
-        
+
         Point pCourant = map.get(e);
-        
+
         Point pCible = calculerPointCible(pCourant, d);
-        
-        if (contenuDansGrille(pCible) && objetALaPosition(pCible) == null) { // a adapter (collisions murs, etc.)
+
+        boolean deplacement = false;
+        boolean bombe = false;
+
+        if (contenuDansGrille(pCible)){ // a adapter (collisions murs, etc.)
             // compter le déplacement : 1 deplacement horizontal et vertical max par pas de temps par entité
-            switch (d) {
-                case bas:
-                case haut:
-                    if (cmptDeplV.get(e) == null) {
-                        cmptDeplV.put(e, 1);
-
-                        retour = true;
+            if(objetALaPosition(pCible) != null){
+                if(objetALaPosition(pCible) instanceof Bombe){
+                    if(e instanceof Bot){
                     }
-                    break;
-                case gauche:
-                case droite:
-                    if (cmptDeplH.get(e) == null) {
-                        cmptDeplH.put(e, 1);
-                        retour = true;
-
+                    else {
+                        Entite entiteBombe = objetALaPosition(pCible);
+                        deplacement = true;
+                        supprimerEntite(entiteBombe, (int) pCible.getX(), (int) pCible.getY());
+                        bombe = true;
                     }
-                    break;
+                }
+                if(objetALaPosition(pCible) instanceof Corde){
+                    Entite entiteCorde = objetALaPosition(pCible);
+                    deplacement = true;
+                    addEntite(entiteCorde, (int) pCible.getX(), (int) pCible.getY());
+
+                }
+                if(objetALaPosition(pCible) instanceof Heros && e instanceof Colonne){
+                    deplacerEntite(objetALaPosition(pCible), Direction.gauche);
+                    deplacement = true;
+                }
+                if(objetALaPosition(pCible) instanceof Heros && e instanceof Bot){
+                    deplacement = false;
+                }
+
+                if(objetALaPosition(pCible) instanceof Bot && (e instanceof Colonne || e instanceof Heros)) {
+                    Bot cible = (Bot) objetALaPosition(pCible);
+                    supprimerEntite(cible, (int) pCible.getX(), (int) pCible.getY());
+                    ordonnanceur.remove(cible.getIA());
+                    ordonnanceur.remove(cible.getGravite());
+                    deplacement = true;
+                }
             }
+            else deplacement = true;
+
+            if(deplacement)
+                switch (d) {
+                    case bas, haut:
+                        if (cmptDeplV.get(e) == null) {
+                            cmptDeplV.put(e, 1);
+                            retour = true;
+                        }
+                        break;
+                    case gauche, droite:
+                        if (cmptDeplH.get(e) == null) {
+                            cmptDeplH.put(e, 1);
+                            retour = true;
+                        }
+                        break;
+                }
         }
 
         if (retour) {

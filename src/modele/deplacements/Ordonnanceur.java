@@ -15,6 +15,10 @@ public class Ordonnanceur extends Observable implements Runnable {
         lstDeplacements.add(deplacement);
     }
 
+    public void remove(RealisateurDeDeplacement deplacement) {
+        lstDeplacements.remove(deplacement);
+    }
+
     public Ordonnanceur(Jeu _jeu) {
         jeu = _jeu;
     }
