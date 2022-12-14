@@ -59,6 +59,7 @@ public class Jeu {
     }
     
     private void initialisationDesEntites() {
+        // affichage du professeur
         hector = new Heros(this);
         addEntite(hector, 15, 6);
         Gravite g = new Gravite();
@@ -67,7 +68,7 @@ public class Jeu {
         Controle4Directions.getInstance().addEntiteDynamique(hector);
         ordonnanceur.add(Controle4Directions.getInstance());
 
-
+        // affichage des ennemis
         Bot smick = new Bot(this);
         addEntite(smick, 1, 8);
         ordonnanceur.add(smick.getIA());
@@ -84,7 +85,24 @@ public class Jeu {
         ordonnanceur.add(smick3.getGravite());
 
 
+        // affichage des piliers
+        // Pilier 1
+        colonne = new Colonne(this);
+        addEntite(colonne, 4, 5);
+        ColonneDeplacement.getInstance().addEntiteDynamique(colonne);
+        ordonnanceur.add(ColonneDeplacement.getInstance());
 
+        colonne = new Colonne(this);
+        addEntite(colonne, 4, 4);
+        ColonneDeplacement.getInstance().addEntiteDynamique(colonne);
+        ordonnanceur.add(ColonneDeplacement.getInstance());
+
+        colonne = new Colonne(this);
+        addEntite(colonne, 4, 3);
+        ColonneDeplacement.getInstance().addEntiteDynamique(colonne);
+        ordonnanceur.add(ColonneDeplacement.getInstance());
+
+        // Pilier 2
         colonne = new Colonne(this);
         addEntite(colonne, 14, 6);
         ColonneDeplacement.getInstance().addEntiteDynamique(colonne);
@@ -100,9 +118,9 @@ public class Jeu {
         ColonneDeplacement.getInstance().addEntiteDynamique(colonne);
         ordonnanceur.add(ColonneDeplacement.getInstance());
 
-
+        // affichage des bombes
         Bombe bombe = new Bombe(this);
-        addEntite(bombe,5,5);
+        addEntite(bombe,1,5);
         addEntite(bombe,12,6);
 
 
@@ -118,7 +136,11 @@ public class Jeu {
             addEntite(new Mur(this), 19, y);
         }
 
+        // affichage des murs intérieurs
         addEntite(new Mur(this), 1, 6);
+        addEntite(new Mur(this), 1, 3);
+        addEntite(new Mur(this), 2, 3);
+        addEntite(new Mur(this), 3, 3);
         addEntite(new Mur(this), 2, 6);
         addEntite(new Mur(this), 3, 6);
         addEntite(new Mur(this), 4, 6);
@@ -143,6 +165,7 @@ public class Jeu {
         addEntite(new Mur(this), 12, 4);
         addEntite(new Mur(this), 13, 4);
 
+        // affichage des cordes
         addEntite(new Corde(this), 6, 5);
         addEntite(new Corde(this), 6, 4);
         addEntite(new Corde(this), 6, 3);
@@ -157,11 +180,13 @@ public class Jeu {
 
     }
 
+    // ajouter une entité
     private void addEntite(Entite e, int x, int y) {
         grilleEntites[x][y] = e;
         map.put(e, new Point(x, y));
     }
 
+    // supprimer une entité
     private void supprimerEntite(Entite e, int x, int y){
         grilleEntites[x][y] = null;
         map.remove(e);
@@ -187,11 +212,11 @@ public class Jeu {
 
         boolean deplacement = false;
         boolean bombe = false;
-        boolean Corde = false;
 
         if (contenuDansGrille(pCible)){ // a adapter (collisions murs, etc.)
             // compter le déplacement : 1 deplacement horizontal et vertical max par pas de temps par entité
             if(objetALaPosition(pCible) != null){
+
                 if(objetALaPosition(pCible) instanceof Bombe){
                     if(e instanceof Bot){
                     }
@@ -219,10 +244,9 @@ public class Jeu {
                 }
                 if(objetALaPosition(pCible) instanceof Bot && e instanceof Colonne) {
                     Bot cible = (Bot) objetALaPosition(pCible);
-                    supprimerEntite(cible, (int) pCible.getX(), (int) pCible.getY());
-                    ordonnanceur.remove(cible.getIA());
-                    ordonnanceur.remove(cible.getGravite());
                     deplacement = true;
+                    supprimerEntite(cible, (int) pCible.getX(), (int) pCible.getY());
+                    System.out.println("Ennemi mort !");
                 }
             }
             else deplacement = true;

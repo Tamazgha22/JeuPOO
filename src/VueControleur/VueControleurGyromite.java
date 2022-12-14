@@ -27,7 +27,7 @@ import modele.plateau.*;
 public class VueControleurGyromite extends JFrame implements Observer {
     private Jeu jeu; // référence sur une classe de modèle : permet d'accéder aux données du modèle pour le rafraichissement, permet de communiquer les actions clavier (ou souris)
 
-    private int sizeX; // taille de la grille affichée
+    private int sizeX; // Taille de la grille affichée
     private int sizeY;
 
     // icones affichées dans la grille
@@ -93,7 +93,6 @@ public class VueControleurGyromite extends JFrame implements Observer {
         for (int y = 0; y < sizeY; y++) {
             for (int x = 0; x < sizeX; x++) {
                 JLabel jlab = new JLabel();
-
                 tabJLabel[x][y] = jlab; // on conserve les cases graphiques dans tabJLabel pour avoir un accès pratique à celles-ci (voir mettreAJourAffichage() )
                 grilleJLabels.add(jlab);
             }
